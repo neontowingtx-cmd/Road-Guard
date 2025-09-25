@@ -1,13 +1,9 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-# Import your other modules using absolute imports
-from db import get_db_session, engine, SessionLocal
-import models, pricing, dispatch  # add others if needed
+app = FastAPI(title="Road Guard API (minimal)")
 
-app = FastAPI(title="Road Guard API")
-
-# Basic CORS (you can tighten this later)
+# Keep CORS open for now; we'll tighten later to your Base44 domain
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -19,8 +15,3 @@ app.add_middleware(
 @app.get("/health")
 def health():
     return {"status": "ok"}
-
-# If you have routes in main.py you want to keep,
-# you can import and include them here like:
-# from main import some_router
-# app.include_router(some_router)
