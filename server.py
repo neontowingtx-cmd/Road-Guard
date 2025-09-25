@@ -15,3 +15,18 @@ app.add_middleware(
 @app.get("/health")
 def health():
     return {"status": "ok"}
+# --- WebSocket endpoint ---
+from fastapi import WebSocket, WebSocketDisconnect
+
+@app.websocket("/ws")
+async def websocket_endpoint(ws: WebSocket):
+    await ws.accept()
+    try:
+        # Send a hello so the frontend knows it's connected
+        await ws.send_json({"type": "hello", "msg": "road-guard ws connected"})
+        # Echo any message back for basic testing
+        while True:
+            msg = await ws.receive_text()
+            await ws.send_json({"type": "echo", "msg": msg})
+    except WebSocketDisconnect:
+        pass
